@@ -1,0 +1,300 @@
+---
+// ============================================================
+// 这是你的整个网站！所有要改的内容都集中在下面 site 对象里。
+// 把【替换】标记的地方改成你自己的信息，保存后浏览器会自动刷新。
+// 改完后运行 `npm run push`，约 1 分钟后线上网站自动更新。
+// ============================================================
+
+const site = {
+  // 【替换】你的名字（导航栏和各处标题）
+  name: '你的名字',
+  // 【替换】一句话介绍自己（首页大标题下面那句）
+  tagline: '一名热爱把想法变成产品的人',
+  // 【替换】更详细的自我介绍（两段）
+  about: [
+    '在这里写第一段自我介绍：你是谁、在做什么、对什么感兴趣。比如你的职业、正在学习或研究的东西、平时的爱好。',
+    '在这里写第二段：你做过什么、擅长什么、希望和什么样的人合作。也可以写一句你的座右铭或正在追求的目标。',
+  ],
+  // 【替换】技能或标签（想删就删，想加就加）
+  skills: ['技能一', '技能二', '技能三', '技能四'],
+  // 【替换】作品或项目（title 标题 / desc 描述 / tags 标签 / link 链接，没有链接就写 '#'）
+  projects: [
+    {
+      title: '项目一',
+      desc: '一句话介绍这个项目做了什么、解决了什么问题。',
+      tags: ['标签1', '标签2'],
+      link: '#',
+    },
+    {
+      title: '项目二',
+      desc: '一句话介绍这个项目做了什么、解决了什么问题。',
+      tags: ['标签1', '标签2'],
+      link: '#',
+    },
+    {
+      title: '项目三',
+      desc: '一句话介绍这个项目做了什么、解决了什么问题。',
+      tags: ['标签1', '标签2'],
+      link: '#',
+    },
+  ],
+  // 【替换】联系方式（email 换成你的邮箱；github 已填好你的账号）
+  email: 'you@example.com',
+  github: 'https://github.com/sll521000',
+  // 可选：其他社交链接（不需要的删掉即可）
+  socials: [
+    { label: 'GitHub', url: 'https://github.com/sll521000' },
+    // { label: '公众号', url: 'https://...' },
+    // { label: '小红书', url: 'https://...' },
+  ],
+};
+
+const base = import.meta.env.BASE_URL;
+const year = new Date().getFullYear();
+---
+
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={`${site.name}的个人网站 —— ${site.tagline}`} />
+    <title>{site.name} · 个人网站</title>
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+  </head>
+
+  <body>
+    <header class="site-header">
+      <nav class="container">
+        <a class="logo" href="#top">{site.name}</a>
+        <div class="nav-links">
+          <a href="#about">关于</a>
+          <a href="#projects">作品</a>
+          <a href="#contact">联系</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="top">
+      <!-- 首屏 -->
+      <section class="hero container">
+        <p class="hello">你好，我是</p>
+        <h1>{site.name}</h1>
+        <p class="tagline">{site.tagline}</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#projects">查看我的作品</a>
+          <a class="btn ghost" href="#contact">联系我</a>
+        </div>
+        <ul class="skills">
+          {site.skills.map((s) => <li>{s}</li>)}
+        </ul>
+      </section>
+
+      <!-- 关于 -->
+      <section id="about" class="container section">
+        <h2>关于我</h2>
+        {site.about.map((p) => <p class="about-p">{p}</p>)}
+      </section>
+
+      <!-- 作品 -->
+      <section id="projects" class="container section">
+        <h2>我的作品</h2>
+        <div class="grid">
+          {
+            site.projects.map((p) => (
+              <a class="card" href={p.link} target={p.link.startsWith('http') ? '_blank' : undefined} rel="noopener">
+                <h3>{p.title}</h3>
+                <p>{p.desc}</p>
+                <div class="tags">
+                  {p.tags.map((t) => <span class="tag">{t}</span>)}
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </section>
+
+      <!-- 联系 -->
+      <section id="contact" class="container section">
+        <h2>联系我</h2>
+        <p class="about-p">欢迎交流合作，可以通过下面的方式找到我：</p>
+        <div class="contact-row">
+          <a class="btn primary" href={`mailto:${site.email}`}>{site.email}</a>
+          {site.socials.map((s) => (
+            <a class="btn ghost" href={s.url} target="_blank" rel="noopener">{s.label}</a>
+          ))}
+        </div>
+      </section>
+    </main>
+
+    <footer class="container">
+      <p>© {year} {site.name} · 用 Astro 构建 · 托管于 GitHub Pages</p>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --bg: #fafbfc;
+    --text: #1a202c;
+    --muted: #5a6472;
+    --accent: #6366f1;
+    --accent-2: #06b6d4;
+    --card-bg: #ffffff;
+    --border: #e5e8ee;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+      'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  section { scroll-margin-top: 80px; }
+
+  /* 顶部导航 */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(250, 251, 252, 0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .site-header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+  }
+  .logo { font-weight: 700; font-size: 18px; color: var(--text); text-decoration: none; }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 15px; }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* 首屏 */
+  .hero { padding: 96px 24px 64px; }
+  .hello { color: var(--muted); font-size: 18px; }
+  .hero h1 {
+    font-size: clamp(40px, 8vw, 64px);
+    line-height: 1.2;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin: 4px 0 8px;
+  }
+  .tagline { font-size: 22px; color: var(--text); font-weight: 500; }
+  .hero-actions { display: flex; gap: 14px; margin: 32px 0 36px; flex-wrap: wrap; }
+
+  .skills { display: flex; flex-wrap: wrap; gap: 10px; list-style: none; }
+  .skills li {
+    font-size: 14px;
+    color: var(--muted);
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 5px 14px;
+  }
+
+  /* 通用区块 */
+  .section { padding: 56px 24px; }
+  .section h2 {
+    font-size: 30px;
+    margin-bottom: 24px;
+    position: relative;
+    padding-left: 16px;
+  }
+  .section h2::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 6px;
+    bottom: 6px;
+    width: 4px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  }
+  .about-p { color: var(--muted); margin-bottom: 14px; max-width: 680px; }
+
+  /* 按钮 */
+  .btn {
+    display: inline-block;
+    padding: 11px 24px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn.primary {
+    color: #fff;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+  }
+  .btn.ghost {
+    color: var(--text);
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+  }
+
+  /* 作品卡片 */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  .card {
+    display: block;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    text-decoration: none;
+    color: var(--text);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(26, 32, 44, 0.08);
+  }
+  .card h3 { font-size: 19px; margin-bottom: 8px; }
+  .card p { color: var(--muted); font-size: 15px; margin-bottom: 16px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    font-size: 12px;
+    color: var(--accent);
+    background: rgba(99, 102, 241, 0.08);
+    border-radius: 999px;
+    padding: 3px 10px;
+  }
+
+  /* 联系和页脚 */
+  .contact-row { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 20px; }
+  footer {
+    padding: 40px 24px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 14px;
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+
+  @media (max-width: 600px) {
+    .nav-links { gap: 18px; }
+    .hero { padding-top: 64px; }
+  }
+</style>
