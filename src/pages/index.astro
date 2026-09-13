@@ -6,8 +6,8 @@
 // ============================================================
 
 const site = {
-  // 【替换】你的名字（导航栏和各处标题）
-  name: '你的名字',
+  // 你的名字（导航栏和各处标题）
+  name: '麒麟',
   // 【替换】一句话介绍自己（首页大标题下面那句）
   tagline: '一名热爱把想法变成产品的人',
   // 【替换】更详细的自我介绍（两段）
@@ -15,37 +15,39 @@ const site = {
     '在这里写第一段自我介绍：你是谁、在做什么、对什么感兴趣。比如你的职业、正在学习或研究的东西、平时的爱好。',
     '在这里写第二段：你做过什么、擅长什么、希望和什么样的人合作。也可以写一句你的座右铭或正在追求的目标。',
   ],
-  // 【替换】技能或标签（想删就删，想加就加）
-  skills: ['技能一', '技能二', '技能三', '技能四'],
-  // 【替换】作品或项目（title 标题 / desc 描述 / tags 标签 / link 链接，没有链接就写 '#'）
+  // 技能标签（想好放什么再填，如：['AI 应用', '读书']；留空数组则不显示这一排）
+  skills: [],
+  // 正在做的项目（title 标题 / desc 一句话描述 / tags 标签 / link 链接，没有链接就写 '#'）
   projects: [
     {
-      title: '项目一',
-      desc: '一句话介绍这个项目做了什么、解决了什么问题。',
-      tags: ['标签1', '标签2'],
+      title: 'Token 中转站',
+      desc: 'Token 中转服务，统一接入各家 AI 模型接口，稳定好用。',
+      tags: ['进行中'],
       link: '#',
     },
     {
-      title: '项目二',
-      desc: '一句话介绍这个项目做了什么、解决了什么问题。',
-      tags: ['标签1', '标签2'],
+      title: '万物成像',
+      desc: '万物成像项目，探索影像生成的更多可能。',
+      tags: ['进行中'],
       link: '#',
     },
     {
-      title: '项目三',
-      desc: '一句话介绍这个项目做了什么、解决了什么问题。',
-      tags: ['标签1', '标签2'],
+      title: '读书',
+      desc: '读书笔记与思考记录，长期坚持。',
+      tags: ['长期坚持'],
       link: '#',
     },
   ],
-  // 【替换】联系方式（email 换成你的邮箱；github 已填好你的账号）
-  email: 'you@example.com',
-  github: 'https://github.com/sll521000',
-  // 可选：其他社交链接（不需要的删掉即可）
+  // 联系卡片（放微信二维码 / 加群二维码）。
+  // 有真实二维码后：把图片放进 public 文件夹，然后在卡片里填 qr: '图片文件名.png'
+  contactCards: [
+    { title: '微信联系', desc: '扫码加我微信', qr: null },
+    { title: 'Token 中转站交流群', desc: '扫码加入交流群', qr: null },
+    { title: 'Token 中转站用户群', desc: '扫码加入用户群', qr: null },
+  ],
+  // 其他社交链接（不需要的删掉即可）
   socials: [
     { label: 'GitHub', url: 'https://github.com/sll521000' },
-    // { label: '公众号', url: 'https://...' },
-    // { label: '小红书', url: 'https://...' },
   ],
 };
 
@@ -68,7 +70,7 @@ const year = new Date().getFullYear();
         <a class="logo" href="#top">{site.name}</a>
         <div class="nav-links">
           <a href="#about">关于</a>
-          <a href="#projects">作品</a>
+          <a href="#work">在做什么</a>
           <a href="#contact">联系</a>
         </div>
       </nav>
@@ -81,12 +83,14 @@ const year = new Date().getFullYear();
         <h1>{site.name}</h1>
         <p class="tagline">{site.tagline}</p>
         <div class="hero-actions">
-          <a class="btn primary" href="#projects">查看我的作品</a>
+          <a class="btn primary" href="#work">我正在做的事情</a>
           <a class="btn ghost" href="#contact">联系我</a>
         </div>
-        <ul class="skills">
-          {site.skills.map((s) => <li>{s}</li>)}
-        </ul>
+        {site.skills.length > 0 && (
+          <ul class="skills">
+            {site.skills.map((s) => <li>{s}</li>)}
+          </ul>
+        )}
       </section>
 
       <!-- 关于 -->
@@ -95,9 +99,9 @@ const year = new Date().getFullYear();
         {site.about.map((p) => <p class="about-p">{p}</p>)}
       </section>
 
-      <!-- 作品 -->
-      <section id="projects" class="container section">
-        <h2>我的作品</h2>
+      <!-- 正在做的事 -->
+      <section id="work" class="container section">
+        <h2>我正在做什么</h2>
         <div class="grid">
           {
             site.projects.map((p) => (
@@ -117,8 +121,20 @@ const year = new Date().getFullYear();
       <section id="contact" class="container section">
         <h2>联系我</h2>
         <p class="about-p">欢迎交流合作，可以通过下面的方式找到我：</p>
+        <div class="contact-grid">
+          {site.contactCards.map((c) => (
+            <div class="contact-card">
+              <h3>{c.title}</h3>
+              {c.qr ? (
+                <img class="qr-img" src={`${base}/${c.qr}`} width="160" height="160" alt={`${c.title}二维码`} />
+              ) : (
+                <div class="qr-box">二维码<br />放这里</div>
+              )}
+              <p>{c.desc}</p>
+            </div>
+          ))}
+        </div>
         <div class="contact-row">
-          <a class="btn primary" href={`mailto:${site.email}`}>{site.email}</a>
           {site.socials.map((s) => (
             <a class="btn ghost" href={s.url} target="_blank" rel="noopener">{s.label}</a>
           ))}
@@ -281,6 +297,38 @@ const year = new Date().getFullYear();
     border-radius: 999px;
     padding: 3px 10px;
   }
+
+  /* 联系卡片 */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+  .contact-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    text-align: center;
+  }
+  .contact-card h3 { font-size: 17px; margin-bottom: 14px; }
+  .contact-card p { color: var(--muted); font-size: 14px; margin-top: 12px; }
+  .qr-box {
+    width: 160px;
+    height: 160px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    color: #aab2bf;
+    font-size: 14px;
+    text-align: center;
+    line-height: 1.6;
+  }
+  .qr-img { border-radius: 10px; border: 1px solid var(--border); }
 
   /* 联系和页脚 */
   .contact-row { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 20px; }
