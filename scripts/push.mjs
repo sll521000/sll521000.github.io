@@ -119,5 +119,8 @@ if (baseCommit) {
 }
 
 console.log(`已提交并推送到 GitHub：${newCommit.sha.slice(0, 7)} ${message}`);
+const siteUrl = REPO.endsWith('.github.io')
+  ? `https://${REPO.split('/')[0]}.github.io/`
+  : `https://${REPO.split('/')[0]}.github.io/${REPO.split('/')[1]}/`;
 console.log('GitHub 正在自动构建并发布，1 分钟左右后访问：');
-console.log(`https://${REPO.split('/')[0]}.github.io/${REPO.split('/')[1]}/`);
+console.log(siteUrl);
