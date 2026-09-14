@@ -1,348 +1,176 @@
 ---
-// ============================================================
-// 这是你的整个网站！所有要改的内容都集中在下面 site 对象里。
-// 把【替换】标记的地方改成你自己的信息，保存后浏览器会自动刷新。
-// 改完后运行 `npm run push`，约 1 分钟后线上网站自动更新。
-// ============================================================
+import { getCollection } from "astro:content";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import IconRss from "@/assets/icons/IconRss.svg";
+import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Socials from "@/components/Socials.astro";
+import Card from "@/components/Card.astro";
+import LinkButton from "@/components/LinkButton.astro";
+import { getSortedPosts } from "@/utils/getSortedPosts";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
 
-const site = {
-  // 你的名字（导航栏和各处标题）
-  name: '麒麟',
-  // 【替换】一句话介绍自己（首页大标题下面那句）
-  tagline: '一名热爱把想法变成产品的人',
-  // 【替换】更详细的自我介绍（两段）
-  about: [
-    '在这里写第一段自我介绍：你是谁、在做什么、对什么感兴趣。比如你的职业、正在学习或研究的东西、平时的爱好。',
-    '在这里写第二段：你做过什么、擅长什么、希望和什么样的人合作。也可以写一句你的座右铭或正在追求的目标。',
-  ],
-  // 技能标签（想好放什么再填，如：['AI 应用', '读书']；留空数组则不显示这一排）
-  skills: [],
-  // 正在做的项目（title 标题 / desc 一句话描述 / tags 标签 / link 链接，没有链接就写 '#'）
-  projects: [
-    {
-      title: 'Token 中转站',
-      desc: 'Token 中转服务，统一接入各家 AI 模型接口，稳定好用。',
-      tags: ['进行中'],
-      link: 'https://www.yun-shu.top/',
-    },
-    {
-      title: '万物成像',
-      desc: '万物成像项目，探索影像生成的更多可能。',
-      tags: ['进行中'],
-      link: 'https://wwdesign.cn/studio/?ref=ww-yun-shutop#/',
-    },
-    {
-      title: '读书',
-      desc: '读书笔记与思考记录，长期坚持。',
-      tags: ['长期坚持'],
-      link: '#',
-    },
-  ],
-  // 联系卡片（放微信二维码 / 加群二维码）。
-  // 有真实二维码后：把图片放进 public 文件夹，然后在卡片里填 qr: '图片文件名.png'
-  contactCards: [
-    { title: '微信联系', desc: '扫码加我微信', qr: null },
-    { title: 'Token 中转站交流群', desc: '扫码加入交流群', qr: null },
-    { title: 'Token 中转站用户群', desc: '扫码加入用户群', qr: null },
-  ],
-  // 其他社交链接（不需要的删掉即可）
-  socials: [
-    { label: 'GitHub', url: 'https://github.com/sll521000' },
-  ],
-};
+const { socials, posts: postsConfig } = config;
 
-const base = import.meta.env.BASE_URL;
-const year = new Date().getFullYear();
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+
+const posts = await getCollection("posts");
+const sortedPosts = getSortedPosts(posts);
+const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
+const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+const homePath = getRelativeLocaleUrl(locale, "");
+
+// 我正在做的事情（有链接的点击直达，没链接的先展示着）
+const projects = [
+  {
+    title: "Token 中转站",
+    url: "https://www.yun-shu.top/",
+    desc: "Token 中转服务，统一接入各家 AI 模型接口，稳定好用。",
+  },
+  {
+    title: "万物成像",
+    url: "https://wwdesign.cn/studio/?ref=ww-yun-shutop#/",
+    desc: "万物成像项目，探索影像生成的更多可能。",
+  },
+  {
+    title: "读书",
+    url: null,
+    desc: "读书笔记与思考记录，长期坚持。",
+  },
+];
 ---
 
-<html lang="zh-CN">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={`${site.name}的个人网站 —— ${site.tagline}`} />
-    <title>{site.name} · 个人网站</title>
-    <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
-  </head>
+<Layout>
+  <Header />
+  <main
+    id="main-content"
+    data-layout="index"
+    data-home-path={homePath}
+    class="app-layout my-1"
+  >
+    <section id="hero" class="border-border border-b pt-8 pb-6">
+      <h1 class="my-4 inline-block text-4xl font-bold sm:my-8 sm:text-5xl">
+        你好，我是麒麟
+      </h1>
+      <a
+        target="_blank"
+        href={`${import.meta.env.BASE_URL.replace(/\/?$/, "/")}rss.xml`}
+        class="inline-block"
+        aria-label="RSS Feed"
+        title="RSS Feed"
+      >
+        <IconRss
+          width={20}
+          height={20}
+          class="stroke-accent scale-125 stroke-3 rtl:-rotate-90"
+        />
+        <span class="sr-only">RSS Feed</span>
+      </a>
 
-  <body>
-    <header class="site-header">
-      <nav class="container">
-        <a class="logo" href="#top">{site.name}</a>
-        <div class="nav-links">
-          <a href="#about">关于</a>
-          <a href="#work">在做什么</a>
-          <a href="#contact">联系</a>
-        </div>
-      </nav>
-    </header>
-
-    <main id="top">
-      <!-- 首屏 -->
-      <section class="hero container">
-        <p class="hello">你好，我是</p>
-        <h1>{site.name}</h1>
-        <p class="tagline">{site.tagline}</p>
-        <div class="hero-actions">
-          <a class="btn primary" href="#work">我正在做的事情</a>
-          <a class="btn ghost" href="#contact">联系我</a>
-        </div>
-        {site.skills.length > 0 && (
-          <ul class="skills">
-            {site.skills.map((s) => <li>{s}</li>)}
-          </ul>
-        )}
-      </section>
-
-      <!-- 关于 -->
-      <section id="about" class="container section">
-        <h2>关于我</h2>
-        {site.about.map((p) => <p class="about-p">{p}</p>)}
-      </section>
-
-      <!-- 正在做的事 -->
-      <section id="work" class="container section">
-        <h2>我正在做什么</h2>
-        <div class="grid">
-          {
-            site.projects.map((p) => (
-              <a class="card" href={p.link} target={p.link.startsWith('http') ? '_blank' : undefined} rel="noopener">
-                <h3>{p.title}</h3>
-                <p>{p.desc}</p>
-                <div class="tags">
-                  {p.tags.map((t) => <span class="tag">{t}</span>)}
-                </div>
-              </a>
-            ))
-          }
-        </div>
-      </section>
-
-      <!-- 联系 -->
-      <section id="contact" class="container section">
-        <h2>联系我</h2>
-        <p class="about-p">欢迎交流合作，可以通过下面的方式找到我：</p>
-        <div class="contact-grid">
-          {site.contactCards.map((c) => (
-            <div class="contact-card">
-              <h3>{c.title}</h3>
-              {c.qr ? (
-                <img class="qr-img" src={`${base}/${c.qr}`} width="160" height="160" alt={`${c.title}二维码`} />
-              ) : (
-                <div class="qr-box">二维码<br />放这里</div>
-              )}
-              <p>{c.desc}</p>
+      <p>
+        欢迎来到我的个人网站。这里记录我正在做的事情，以及平时的思考与读书笔记。
+      </p>
+      <p class="mt-2">
+        欢迎交流合作，可以在下面的社交链接找到我。
+      </p>
+      {
+        socials.length > 0 && (
+          <div class="mt-4 flex max-sm:flex-col sm:items-center">
+            <div class="me-2 mb-1 whitespace-nowrap sm:mb-0">
+              {t.home.socialLinks}:
             </div>
-          ))}
+            <Socials />
+          </div>
+        )
+      }
+    </section>
+
+    <section id="projects" class="border-border border-b pt-12 pb-6">
+      <h2 class="text-2xl font-semibold tracking-wide">我正在做什么</h2>
+      <ul>
+        {
+          projects.map(p => (
+            <li class="my-6">
+              {p.url ? (
+                <a
+                  href={p.url}
+                  target="_blank"
+                  rel="noopener"
+                  class="text-accent inline-block text-lg font-medium decoration-dashed underline-offset-4 hover:underline"
+                >
+                  <h3>{p.title} ↗</h3>
+                </a>
+              ) : (
+                <h3 class="text-lg font-medium">{p.title}</h3>
+              )}
+              <p>{p.desc}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    {
+      featuredPosts.length > 0 && (
+        <section
+          id="featured"
+          class:list={[
+            "pt-12 pb-6",
+            { "border-border border-b": recentPosts.length > 0 },
+          ]}
+        >
+          <h2 class="text-2xl font-semibold tracking-wide">
+            {t.home.featured}
+          </h2>
+          <ul>
+            {featuredPosts.map(data => (
+              <Card variant="h3" {...data} />
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      recentPosts.length > 0 && (
+        <section id="recent-posts" class="pt-12 pb-6">
+          <h2 class="text-2xl font-semibold tracking-wide">
+            {t.home.recentPosts}
+          </h2>
+          <ul>
+            {recentPosts.slice(0, postsConfig.perIndex).map(data => (
+              <Card variant="h3" {...data} />
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      sortedPosts.length > 0 && (
+        <div class="my-8 text-center">
+          <LinkButton href={getRelativeLocaleUrl(locale, "posts")}>
+            {t.home.allPosts}
+            <IconArrowRight class="inline-block rtl:-rotate-180" />
+          </LinkButton>
         </div>
-        <div class="contact-row">
-          {site.socials.map((s) => (
-            <a class="btn ghost" href={s.url} target="_blank" rel="noopener">{s.label}</a>
-          ))}
-        </div>
-      </section>
-    </main>
+      )
+    }
+  </main>
+  <Footer />
+</Layout>
 
-    <footer class="container">
-      <p>© {year} {site.name} · 用 Astro 构建 · 托管于 GitHub Pages</p>
-    </footer>
-  </body>
-</html>
-
-<style is:global>
-  :root {
-    --bg: #fafbfc;
-    --text: #1a202c;
-    --muted: #5a6472;
-    --accent: #6366f1;
-    --accent-2: #06b6d4;
-    --card-bg: #ffffff;
-    --border: #e5e8ee;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
-      'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.7;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  .container {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-
-  section { scroll-margin-top: 80px; }
-
-  /* 顶部导航 */
-  .site-header {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background: rgba(250, 251, 252, 0.85);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border);
-  }
-  .site-header nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 60px;
-  }
-  .logo { font-weight: 700; font-size: 18px; color: var(--text); text-decoration: none; }
-  .nav-links { display: flex; gap: 28px; }
-  .nav-links a { color: var(--muted); text-decoration: none; font-size: 15px; }
-  .nav-links a:hover { color: var(--accent); }
-
-  /* 首屏 */
-  .hero { padding: 96px 24px 64px; }
-  .hello { color: var(--muted); font-size: 18px; }
-  .hero h1 {
-    font-size: clamp(40px, 8vw, 64px);
-    line-height: 1.2;
-    background: linear-gradient(90deg, var(--accent), var(--accent-2));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    margin: 4px 0 8px;
-  }
-  .tagline { font-size: 22px; color: var(--text); font-weight: 500; }
-  .hero-actions { display: flex; gap: 14px; margin: 32px 0 36px; flex-wrap: wrap; }
-
-  .skills { display: flex; flex-wrap: wrap; gap: 10px; list-style: none; }
-  .skills li {
-    font-size: 14px;
-    color: var(--muted);
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 5px 14px;
-  }
-
-  /* 通用区块 */
-  .section { padding: 56px 24px; }
-  .section h2 {
-    font-size: 30px;
-    margin-bottom: 24px;
-    position: relative;
-    padding-left: 16px;
-  }
-  .section h2::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 6px;
-    bottom: 6px;
-    width: 4px;
-    border-radius: 2px;
-    background: linear-gradient(180deg, var(--accent), var(--accent-2));
-  }
-  .about-p { color: var(--muted); margin-bottom: 14px; max-width: 680px; }
-
-  /* 按钮 */
-  .btn {
-    display: inline-block;
-    padding: 11px 24px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 15px;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-  }
-  .btn:hover { transform: translateY(-2px); }
-  .btn.primary {
-    color: #fff;
-    background: linear-gradient(90deg, var(--accent), var(--accent-2));
-    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
-  }
-  .btn.ghost {
-    color: var(--text);
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-  }
-
-  /* 作品卡片 */
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 20px;
-  }
-  .card {
-    display: block;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 24px;
-    text-decoration: none;
-    color: var(--text);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-  }
-  .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(26, 32, 44, 0.08);
-  }
-  .card h3 { font-size: 19px; margin-bottom: 8px; }
-  .card p { color: var(--muted); font-size: 15px; margin-bottom: 16px; }
-  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
-  .tag {
-    font-size: 12px;
-    color: var(--accent);
-    background: rgba(99, 102, 241, 0.08);
-    border-radius: 999px;
-    padding: 3px 10px;
-  }
-
-  /* 联系卡片 */
-  .contact-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    margin-bottom: 24px;
-  }
-  .contact-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 24px;
-    text-align: center;
-  }
-  .contact-card h3 { font-size: 17px; margin-bottom: 14px; }
-  .contact-card p { color: var(--muted); font-size: 14px; margin-top: 12px; }
-  .qr-box {
-    width: 160px;
-    height: 160px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px dashed var(--border);
-    border-radius: 10px;
-    color: #aab2bf;
-    font-size: 14px;
-    text-align: center;
-    line-height: 1.6;
-  }
-  .qr-img { border-radius: 10px; border: 1px solid var(--border); }
-
-  /* 联系和页脚 */
-  .contact-row { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 20px; }
-  footer {
-    padding: 40px 24px;
-    text-align: center;
-    color: var(--muted);
-    font-size: 14px;
-    border-top: 1px solid var(--border);
-    margin-top: 40px;
-  }
-
-  @media (max-width: 600px) {
-    .nav-links { gap: 18px; }
-    .hero { padding-top: 64px; }
-  }
-</style>
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const indexLayout = (document.querySelector("#main-content") as HTMLElement)
+      ?.dataset;
+    const baseRoot = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+    if (indexLayout?.layout) {
+      sessionStorage.setItem("backUrl", indexLayout.homePath ?? baseRoot);
+    }
+  });
+</script>

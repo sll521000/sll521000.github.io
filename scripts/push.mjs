@@ -6,7 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const REPO = 'sll521000/personal-website';
+const REPO = 'sll521000/sll521000.github.io';
 const BRANCH = 'main';
 const dir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const message = process.argv[2] || '更新网站';

@@ -1,40 +1,44 @@
-# 个人网站（Astro + GitHub Pages）
+# 麒麟的个人网站（AstroPaper 主题）
 
-用 [Astro](https://astro.build/) 从零搭建的个人网站，托管在 GitHub Pages，**不需要买服务器**。
+基于 GitHub 上星标最高的 Astro 个人网站主题 [AstroPaper](https://github.com/satnaing/astro-paper)（5000+ star）搭建，托管在 GitHub Pages，**不需要买服务器**。
 
-线上地址：https://sll521000.github.io/personal-website/
-代码仓库：https://github.com/sll521000/personal-website
+线上地址：https://sll521000.github.io
+代码仓库：https://github.com/sll521000/sll521000.github.io
 
-## 日常使用（三步）
+## 日常使用
 
-1. 打开 `src/pages/index.astro`，把文件顶部 `site` 对象里带【替换】标注的内容改成你自己的（名字、介绍、作品、邮箱等）。
-2. 本地预览（可选）：`npm run dev`，浏览器打开 http://localhost:4321
-3. 发布更新：`npm run push -- "这次改了什么"`，等 1 分钟左右网站自动更新。
+| 想改什么 | 改哪里 |
+|----------|--------|
+| 网站名字、介绍、社交链接 | `astro-paper.config.ts` |
+| 首页"我正在做什么"卡片 | `src/pages/index.astro` 顶部的 `projects` 数组 |
+| 关于页 | `src/content/pages/about.md` |
+| 写文章（读书笔记等） | 在 `src/content/posts/` 新建 `.md` 文件 |
+| 界面文字（导航、按钮等） | `src/i18n/lang/zh.ts` |
 
-> `npm run push` 电脑上不装 git 也能用（内部用 isomorphic-git + 你已登录的 gh CLI 令牌），提交并推送到 GitHub 后，GitHub Actions 会自动构建发布。
+本地预览：`npm run dev`（http://localhost:4321，保存自动刷新）
 
-## 常用命令
+发布更新：`npm run push -- "这次改了什么"`，1 分钟左右自动上线。
+（电脑不装 git 也能用：脚本走 GitHub API + 你已登录的 gh CLI。）
 
-| 命令 | 作用 |
-|------|------|
-| `npm run dev` | 本地开发预览（localhost:4321，保存自动刷新） |
-| `npm run build` | 构建到 `dist/` 目录 |
-| `npm run preview` | 本地预览构建结果 |
-| `npm run push -- "说明"` | 提交并推送，触发线上自动部署 |
+## 写一篇文章的格式
 
-## 文件结构
+在 `src/content/posts/` 新建 `my-post.md`：
 
+```markdown
+---
+title: 文章标题
+description: 一句话摘要
+pubDatetime: 2026-09-13T20:00:00+08:00
+featured: false
+tags:
+  - 读书
+---
+
+正文用 Markdown 写。
 ```
-personal-website/
-├── src/pages/index.astro     ← 网站全部内容和样式（日常只改这个）
-├── public/favicon.svg        ← 网站图标
-├── astro.config.mjs          ← Pages 域名和仓库名配置（不用动）
-├── .github/workflows/deploy.yml ← 推送后自动构建部署（不用动）
-└── scripts/push.mjs          ← npm run push 背后的脚本（不用动）
-```
 
-## 注意事项
+## 注意
 
-- 改内容只需要改 `index.astro` 顶部的 `site` 对象；想大改样式就改下面的 `<style>` 部分。
-- 仓库配置的是**项目站点**，访问地址带 `/personal-website/` 路径；如果以后想用根地址（`sll521000.github.io`），把代码推到名为 `sll521000.github.io` 的仓库并删掉 `astro.config.mjs` 里的 `base` 即可。
-- 部署状态可在仓库的 **Actions** 标签页查看：https://github.com/sll521000/personal-website/actions
+- 主题构建时需要从 Google Fonts 下载字体（仅影响构建机器，国内本地构建会自动降级为系统字体，不影响线上）。
+- 仓库是 `用户名.github.io` 形式的**用户站点**，直接挂在根地址，无子路径。
+- 部署状态：https://github.com/sll521000/sll521000.github.io/actions
