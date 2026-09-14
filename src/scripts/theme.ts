@@ -5,9 +5,8 @@ const DARK = "dark";
 function getPreferredTheme(): string {
   const stored = localStorage.getItem(THEME_KEY);
   if (stored) return stored;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? DARK
-    : LIGHT;
+  // 默认深色科技风
+  return DARK;
 }
 
 // Reuse the value already set by the inline FOUC-prevention script if available.

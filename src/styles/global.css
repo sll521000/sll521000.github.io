@@ -23,7 +23,7 @@
 }
 
 @utility max-w-app {
-  @apply max-w-3xl;
+  @apply max-w-4xl;
 }
 
 @utility app-layout {
@@ -36,4 +36,61 @@
 
 :target {
   scroll-margin-block: 1rem;
+}
+
+/* ===== 麒麟 · 深色科技风定制 ===== */
+
+/* 渐变发光标题 */
+.gradient-text {
+  background: linear-gradient(92deg, #22d3ee 0%, #818cf8 55%, #e879f9 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* 首屏顶部霓虹光晕 */
+.hero-glow {
+  position: relative;
+  isolation: isolate;
+}
+.hero-glow::before {
+  content: "";
+  position: absolute;
+  inset: -5rem 0 auto;
+  height: 20rem;
+  background:
+    radial-gradient(38rem 13rem at 18% 0%, rgba(34, 211, 238, 0.16), transparent 70%),
+    radial-gradient(34rem 13rem at 82% 8%, rgba(167, 139, 250, 0.16), transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* 悬浮发光卡片 */
+.glow-card {
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.glow-card:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in oklab, var(--accent) 55%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--accent) 30%, transparent),
+    0 10px 34px color-mix(in oklab, var(--accent) 16%, transparent);
+}
+
+/* 标签胶囊 */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.25rem 0.85rem;
+  font-size: 0.8rem;
+  color: var(--muted-foreground);
+  background: color-mix(in oklab, var(--muted) 65%, transparent);
 }
